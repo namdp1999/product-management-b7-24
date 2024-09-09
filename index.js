@@ -1,5 +1,6 @@
 const express = require("express");
 require('dotenv').config();
+const systemConfig = require("./config/system");
 const app = express();
 const port = process.env.PORT;
 
@@ -14,6 +15,10 @@ app.set('view engine', 'pug'); // template engine sử dụng: pug
 
 app.use(express.static('public')); // Thiết lập thư mục chứa file tĩnh
 
+// Khai báo biến toàn cục cho file pug
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
+
+// Khai báo đường dẫn
 routeAdmin(app);
 routeClient(app);
 
