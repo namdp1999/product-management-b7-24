@@ -11,6 +11,13 @@ module.exports.index = async (req, res) => {
   }
   // Hết Lọc theo trạng thái
 
+  // Tìm kiếm
+  if(req.query.keyword) {
+    const regex = new RegExp(req.query.keyword, "i");
+    find.title = regex;
+  }
+  // Hết Tìm kiếm
+
   const products = await Product.find(find);
 
   res.render("admin/pages/products/index", {
