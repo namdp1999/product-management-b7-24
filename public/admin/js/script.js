@@ -77,3 +77,35 @@ if(listButtonPagination.length > 0) {
   }
 }
 // Hết Phân trang
+
+// Đổi trạng thái
+const listButtonChangeStatus = document.querySelectorAll("[button-change-status]");
+if(listButtonChangeStatus.length > 0) {
+  listButtonChangeStatus.forEach(button => {
+    button.addEventListener("click", () => {
+      const itemId = button.getAttribute("item-id");
+      const statusChange = button.getAttribute("button-change-status");
+      const path = button.getAttribute("data-path");
+
+      const data = {
+        id: itemId,
+        status: statusChange
+      };
+
+      fetch(path, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == "success") {
+            location.reload();
+          }
+        })
+    })
+  })
+}
+// Hết Đổi trạng thái
