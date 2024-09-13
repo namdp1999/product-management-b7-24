@@ -164,7 +164,7 @@ if(listButtonDelete.length > 0) {
           headers: {
             "Content-Type": "application/json",
           },
-          method: "DELETE",
+          method: "PATCH",
           body: JSON.stringify({
             id: id
           })
