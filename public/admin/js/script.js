@@ -109,3 +109,42 @@ if(listButtonChangeStatus.length > 0) {
   })
 }
 // Hết Đổi trạng thái
+
+// Đổi trạng thái cho nhiều bản ghi
+const formChangeMulti = document.querySelector("[form-change-multi]");
+if(formChangeMulti) {
+  formChangeMulti.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const path = formChangeMulti.getAttribute("data-path");
+
+    const status = formChangeMulti.status.value;
+    const ids = [];
+
+    const listInputChangeChecked = document.querySelectorAll("[input-change]:checked");
+    listInputChangeChecked.forEach(input => {
+      const id = input.getAttribute("input-change");
+      ids.push(id);
+    })
+
+    const data = {
+      ids: ids,
+      status: status
+    };
+
+    fetch(path, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "PATCH",
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if(data.code == "success") {
+          location.reload();
+        }
+      })
+  })
+}
+// Hết Đổi trạng thái cho nhiều bản ghi

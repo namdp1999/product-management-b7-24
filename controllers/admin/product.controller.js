@@ -58,3 +58,16 @@ module.exports.changeStatus = async (req, res) => {
     message: "Đổi trạng thái thành công!"
   });
 }
+
+module.exports.changeMulti = async (req, res) => {
+  await Product.updateMany({
+    _id: req.body.ids
+  }, {
+    status: req.body.status
+  });
+
+  res.json({
+    code: "success",
+    message: "Đổi trạng thái thành công!"
+  });
+}
