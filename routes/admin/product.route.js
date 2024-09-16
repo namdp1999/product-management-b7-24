@@ -11,4 +11,6 @@ router.patch("/change-multi", controller.changeMulti);
 
 router.patch("/delete", controller.delete);
 
+router.patch("/change-position", controller.changePosition);
+
 module.exports = router;

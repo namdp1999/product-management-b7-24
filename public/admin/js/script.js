@@ -188,3 +188,33 @@ if(listButtonDelete.length > 0) {
   })
 }
 // Hết Xóa bản ghi
+
+// Đổi vị trí
+const listInputPosition = document.querySelectorAll("[input-position]");
+if(listInputPosition.length > 0) {
+  listInputPosition.forEach(input => {
+    input.addEventListener("change", () => {
+      const position = parseInt(input.value);
+      const id = input.getAttribute("item-id");
+      const path = input.getAttribute("data-path");
+
+      fetch(path, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+        body: JSON.stringify({
+          id: id,
+          position: position
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == "success") {
+            location.reload();
+          }
+        })
+    })
+  })
+}
+// Hết Đổi vị trí

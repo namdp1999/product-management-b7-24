@@ -36,7 +36,13 @@ module.exports.index = async (req, res) => {
   const totalPage = Math.ceil(totalProduct/limitItems);
   // Hết Phân trang
 
-  const products = await Product.find(find).limit(limitItems).skip(skip);
+  const products = await Product
+    .find(find)
+    .limit(limitItems)
+    .skip(skip)
+    .sort({
+      position: "desc"
+    });
 
   res.render("admin/pages/products/index", {
     pageTitle: "Danh sách sản phẩm",
@@ -105,5 +111,18 @@ module.exports.delete = async (req, res) => {
   res.json({
     code: "success",
     message: "Đổi trạng thái thành công!"
+  });
+}
+
+module.exports.changePosition = async (req, res) => {
+  await Product.updateOne({
+    _id: req.body.id
+  }, {
+    position: req.body.position
+  });
+
+  res.json({
+    code: "success",
+    message: "Đổi vị trí thành công!"
   });
 }
