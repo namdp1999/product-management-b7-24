@@ -1,5 +1,8 @@
 const express = require("express");
 const bodyParser = require('body-parser');
+const flash = require('express-flash');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 require('dotenv').config();
 const systemConfig = require("./config/system");
 
@@ -22,6 +25,11 @@ app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 // parse application/json
 app.use(bodyParser.json());
+
+// Flash
+app.use(cookieParser('JKSLSF'));
+app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(flash());
 
 // Khai báo đường dẫn
 routeAdmin(app);

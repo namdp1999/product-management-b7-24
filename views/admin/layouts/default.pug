@@ -7,6 +7,12 @@ html
     link(rel="stylesheet", href="/admin/css/style.css")
 
   body
+
+    - if (messages.success)
+      div(
+        class="alert alert-success alert-message"
+        alert-message
+      ) #{messages.success}
     
     include ../partials/header.pug
 
