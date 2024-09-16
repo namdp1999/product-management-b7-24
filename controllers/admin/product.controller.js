@@ -132,3 +132,15 @@ module.exports.changePosition = async (req, res) => {
     code: "success"
   });
 }
+
+module.exports.create = async (req, res) => {
+  res.render("admin/pages/products/create", {
+    pageTitle: "Thêm mới sản phẩm"
+  });
+}
+
+module.exports.createPost = async (req, res) => {
+  console.log(req.body);
+
+  res.send("OK");
+}

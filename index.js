@@ -23,6 +23,9 @@ app.use(express.static('public')); // Thiết lập thư mục chứa file tĩnh
 // Khai báo biến toàn cục cho file pug
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
 // parse application/json
 app.use(bodyParser.json());
 
