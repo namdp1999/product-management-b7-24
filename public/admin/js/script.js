@@ -119,6 +119,14 @@ if(formChangeMulti) {
     const path = formChangeMulti.getAttribute("data-path");
 
     const status = formChangeMulti.status.value;
+
+    if(status == "delete") {
+      const isConfirm = confirm("Bạn có chắc muốn xóa những bản ghi này?");
+      if(!isConfirm) {
+        return;
+      }
+    }
+
     const ids = [];
 
     const listInputChangeChecked = document.querySelectorAll("[input-change]:checked");
