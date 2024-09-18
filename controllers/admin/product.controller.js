@@ -1,4 +1,5 @@
 const Product = require("../../models/product.model");
+const systemConfig = require("../../config/system");
 
 module.exports.index = async (req, res) => {
   const find = {
@@ -140,7 +141,19 @@ module.exports.create = async (req, res) => {
 }
 
 module.exports.createPost = async (req, res) => {
-  console.log(req.body);
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
 
-  res.send("OK");
+  if(req.body.position) {
+    req.body.position = parseInt(req.body.position);
+  } else {
+    const countRecord = await Product.countDocuments();
+    req.body.position = countRecord + 1;
+  }
+
+  const record = new Product(req.body);
+  await record.save();
+
+  res.redirect(`/${systemConfig.prefixAdmin}/products`);
 }
