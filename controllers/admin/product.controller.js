@@ -199,3 +199,17 @@ module.exports.editPatch = async (req, res) => {
   req.flash("success", "Cập nhật thành công!");
   res.redirect("back");
 }
+
+module.exports.detail = async (req, res) => {
+  const id = req.params.id;
+
+  const product = await Product.findOne({
+    _id: id,
+    deleted: false
+  });
+
+  res.render("admin/pages/products/detail", {
+    pageTitle: "Chi tiết sản phẩm",
+    product: product
+  });
+}
