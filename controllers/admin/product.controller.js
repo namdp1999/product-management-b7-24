@@ -37,13 +37,24 @@ module.exports.index = async (req, res) => {
   const totalPage = Math.ceil(totalProduct/limitItems);
   // Hết Phân trang
 
+  // Sắp xếp
+  const sort = {};
+
+  if(req.query.sortKey && req.query.sortValue) {
+    const sortKey = req.query.sortKey;
+    const sortValue = req.query.sortValue;
+
+    sort[sortKey] = sortValue;
+  } else {
+    sort["position"] = "desc";
+  }
+  // Hết Sắp xếp
+
   const products = await Product
     .find(find)
     .limit(limitItems)
     .skip(skip)
-    .sort({
-      position: "desc"
-    });
+    .sort(sort);
 
   res.render("admin/pages/products/index", {
     pageTitle: "Danh sách sản phẩm",
