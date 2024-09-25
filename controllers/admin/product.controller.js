@@ -60,7 +60,8 @@ module.exports.index = async (req, res) => {
     pageTitle: "Danh sách sản phẩm",
     products: products,
     totalPage: totalPage,
-    currentPage: page
+    currentPage: page,
+    limitItems: limitItems
   });
 }
 
