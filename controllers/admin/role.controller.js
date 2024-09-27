@@ -51,3 +51,31 @@ module.exports.editPatch = async (req, res) => {
 
   res.redirect(`back`);
 }
+
+module.exports.permissions = async (req, res) => {
+  const records = await Role.find({
+    deleted: false
+  });
+
+  res.render("admin/pages/roles/permissions", {
+    pageTitle: "Phân quyền",
+    records: records
+  });
+}
+
+module.exports.permissionsPatch = async (req, res) => {
+  for (const item of req.body) {
+    await Role.updateOne({
+      _id: item.id,
+      deleted: false
+    }, {
+      permissions: item.permissions
+    });
+  }
+
+  req.flash("success", "Cập nhật thành công!");
+
+  res.json({
+    code: "success"
+  });
+}
