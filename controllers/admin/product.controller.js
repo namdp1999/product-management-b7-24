@@ -1,6 +1,8 @@
 const Product = require("../../models/product.model");
 const ProductCategory = require("../../models/product-category.model");
+const Account = require("../../models/account.model");
 const systemConfig = require("../../config/system");
+const moment = require("moment");
 
 module.exports.index = async (req, res) => {
   const find = {
@@ -56,6 +58,22 @@ module.exports.index = async (req, res) => {
     .limit(limitItems)
     .skip(skip)
     .sort(sort);
+
+  for (const item of products) {
+    const infoCreated = await Account.findOne({
+      _id: item.createdBy
+    });
+
+    if(infoCreated) {
+      item.createdByFullName = infoCreated.fullName;
+    } else {
+      item.createdByFullName = "";
+    }
+
+    if(item.createdAt) {
+      item.createdAtFormat = moment(item.createdAt).format("HH:mm - DD/MM/YY");
+    }
+  }
 
   res.render("admin/pages/products/index", {
     pageTitle: "Danh sách sản phẩm",
@@ -163,6 +181,8 @@ module.exports.createPost = async (req, res) => {
     req.body.price = parseInt(req.body.price);
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
     req.body.stock = parseInt(req.body.stock);
+    req.body.createdBy = res.locals.user.id;
+    req.body.createdAt = new Date();
   
     if(req.body.position) {
       req.body.position = parseInt(req.body.position);
