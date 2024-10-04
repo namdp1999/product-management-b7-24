@@ -32,4 +32,6 @@ router.get("/change-password/:id", controller.changePassword);
 
 router.patch("/change-password/:id", controller.changePasswordPatch);
 
+router.get("/my-profile", controller.myProfile);
+
 module.exports = router;

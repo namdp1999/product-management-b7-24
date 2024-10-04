@@ -98,3 +98,9 @@ module.exports.changePasswordPatch = async (req, res) => {
 
   res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
 }
+
+module.exports.myProfile = async (req, res) => {
+  res.render("admin/pages/accounts/my-profile", {
+    pageTitle: "Thông tin cá nhân"
+  });
+}
