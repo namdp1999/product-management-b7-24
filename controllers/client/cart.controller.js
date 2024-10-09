@@ -90,3 +90,29 @@ module.exports.delete = async (req, res) => {
 
   res.redirect("back");
 }
+
+module.exports.updatePatch = async (req, res) => {
+  const cartId = req.cookies.cartId;
+  const product = req.body;
+
+  const cart = await Cart.findOne({
+    _id: cartId
+  });
+
+  const products = cart.products;
+
+  const productUpdate = products.find(item => item.productId == product.productId);
+
+  productUpdate.quantity = parseInt(product.quantity);
+
+  await Cart.updateOne({
+    _id: cartId
+  }, {
+    products: products
+  });
+
+  res.json({
+    code: "success",
+    message: "Cập nhật thành công!"
+  });
+}
