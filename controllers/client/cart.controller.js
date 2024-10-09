@@ -71,3 +71,22 @@ module.exports.addPost = async (req, res) => {
 
   res.redirect("back");
 }
+
+module.exports.delete = async (req, res) => {
+  const cartId = req.cookies.cartId;
+  const productId = req.params.id;
+
+  const cart = await Cart.findOne({
+    _id: cartId
+  });
+
+  const products = cart.products.filter(item => item.productId != productId);
+
+  await Cart.updateOne({
+    _id: cartId
+  }, {
+    products: products
+  });
+
+  res.redirect("back");
+}
