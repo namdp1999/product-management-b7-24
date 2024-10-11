@@ -27,3 +27,12 @@ if(tableCart) {
   })
 }
 // End table-cart
+
+// alert-message
+const alertMessage = document.querySelector("[alert-message]");
+if(alertMessage) {
+  setTimeout(() => {
+    alertMessage.style.display = "none";
+  }, 3000);
+}
+// End alert-message
