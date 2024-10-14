@@ -194,3 +194,9 @@ module.exports.resetPasswordPost = async (req, res) => {
 
   res.redirect("/");
 };
+
+module.exports.profile = async (req, res) => {
+  res.render("client/pages/user/profile", {
+    pageTitle: "Thông tin tài khoản",
+  });
+};
