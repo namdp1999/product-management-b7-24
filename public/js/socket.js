@@ -18,3 +18,9 @@ if(formChat) {
   })
 }
 // End CLIENT_SEND_MESSAGE
+
+// SERVER_RETURN_MESSAGE
+socket.on("SERVER_RETURN_MESSAGE", (data) => {
+  console.log(data);
+})
+// End SERVER_RETURN_MESSAGE
