@@ -3,6 +3,7 @@ const productRoute = require("./product.route");
 const cartRoute = require("./cart.route");
 const orderRoute = require("./order.route");
 const userRoute = require("./user.route");
+const chatRoute = require("./chat.route");
 
 const categoryMiddleware = require("../../middlewares/client/category.middleware");
 
@@ -30,6 +31,8 @@ module.exports = (app) => {
   app.use("/order", orderRoute);
 
   app.use("/user", userRoute);
+
+  app.use("/chat", chatRoute);
 
   app.get("*", (req, res) => {
     res.render("client/pages/errors/404", {
