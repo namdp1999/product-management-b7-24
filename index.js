@@ -7,9 +7,14 @@ const methodOverride = require('method-override');
 const path = require('path');
 require('dotenv').config();
 const systemConfig = require("./config/system");
+const http = require('http');
+const { Server } = require("socket.io");
 
 const app = express();
 const port = process.env.PORT;
+
+const server = http.createServer(app);
+const io = new Server(server);
 
 const databse = require("./config/database");
 databse.connect();
@@ -46,6 +51,10 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 routeAdmin(app);
 routeClient(app);
 
-app.listen(port, () => {
+io.on("connection", (socket) => {
+  console.log("Có 1 user kết nối!", socket.id);
+});
+
+server.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
