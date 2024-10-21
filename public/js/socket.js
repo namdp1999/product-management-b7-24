@@ -161,3 +161,18 @@ if(elementListTyping) {
   })
 }
 // End SERVER_RETURN_TYPING
+
+// Chức năng gửi yêu cầu
+const listBtnAddFriend = document.querySelectorAll("[btn-add-friend]");
+if(listBtnAddFriend.length > 0) {
+  listBtnAddFriend.forEach(button => {
+    button.addEventListener("click", () => {
+      const userIdB = button.getAttribute("btn-add-friend");
+
+      button.closest(".box-user").classList.add("add");
+
+      socket.emit("CLIENT_ADD_FRIEND", userIdB);
+    })
+  })
+}
+// Hết Chức năng gửi yêu cầu
