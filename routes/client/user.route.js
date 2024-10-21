@@ -38,4 +38,10 @@ router.get(
   controller.notFriend
 );
 
+router.get(
+  "/request",
+  userMiddleware.requireAuth,
+  controller.request
+);
+
 module.exports = router;
