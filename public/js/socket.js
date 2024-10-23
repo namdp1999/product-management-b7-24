@@ -230,3 +230,67 @@ socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIENDS", (data) => {
   }
 });
 // End SERVER_RETURN_LENGTH_ACCEPT_FRIENDS
+
+// SERVER_RETURN_INFO_ACCEPT_FRIENDS
+socket.on("SERVER_RETURN_INFO_ACCEPT_FRIENDS", (data) => {
+  const listAcceptFriends = document.querySelector(`[list-accept-friends="${data.userIdB}"]`);
+  if(listAcceptFriends) {
+    const newUser = document.createElement("div");
+    newUser.classList.add("col-6");
+    newUser.innerHTML = `
+      <div class="box-user">
+        <div class="inner-avatar">
+          <img src="https://robohash.org/hicveldicta.png" alt="${data.fullNameA}" />
+        </div>
+        <div class="inner-info">
+          <div class="inner-name">${data.fullNameA}</div>
+          <div class="inner-buttons">
+            <button 
+              class="btn btn-sm btn-primary mr-1"
+              btn-accept-friend="${data.userIdA}"
+            >
+              Chấp nhận
+            </button>
+            <button
+              class="btn btn-sm btn-secondary mr-1"
+              btn-refuse-friend="${data.userIdA}"
+            >
+              Xóa
+            </button>
+            <button 
+              class="btn btn-sm btn-secondary mr-1" 
+              btn-deleted-friend="" 
+              disabled=""
+            >
+              Đã xóa
+            </button>
+            <button 
+              class="btn btn-sm btn-primary mr-1" 
+              btn-accepted-friend="" 
+              disabled=""
+            >
+              Đã chấp nhận
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    listAcceptFriends.appendChild(newUser);
+
+    // Chấp nhận kết bạn
+    const btnAcceptFriend = newUser.querySelector("[btn-accept-friend]");
+    btnAcceptFriend.addEventListener("click", () => {
+      btnAcceptFriend.closest(".box-user").classList.add("accepted");
+      socket.emit("CLIENT_ACCEPT_FRIEND", data.userIdA);
+    })
+
+    // Không chấp nhận kết bạn
+    const btnRefuseFriend = newUser.querySelector("[btn-refuse-friend]");
+    btnRefuseFriend.addEventListener("click", () => {
+      btnRefuseFriend.closest(".box-user").classList.add("refuse");
+      socket.emit("CLIENT_REFUSE_FRIEND", data.userIdA);
+    })
+  }
+})
+// End SERVER_RETURN_INFO_ACCEPT_FRIENDS

@@ -45,6 +45,14 @@ module.exports = (req, res) => {
         userIdB: userIdB,
         length: userB.acceptFriends.length
       })
+
+      // Trả về cho B thông tin của A
+      _io.emit("SERVER_RETURN_INFO_ACCEPT_FRIENDS", {
+        userIdA: userIdA,
+        fullNameA: res.locals.user.fullName,
+        avatarA: "", //res.locals.user.avatar
+        userIdB: userIdB,
+      })
     })
 
     // Khi A hủy gửi yêu cầu cho B

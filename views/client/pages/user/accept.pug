@@ -10,7 +10,7 @@ block main
       .col-12
         +box-head(pageTitle)
 
-    .row
+    .row(list-accept-friends=user.id)
       each item in users
         .col-6
           div(class="box-user")
