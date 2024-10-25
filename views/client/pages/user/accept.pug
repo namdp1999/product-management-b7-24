@@ -12,7 +12,7 @@ block main
 
     .row(list-accept-friends=user.id)
       each item in users
-        .col-6
+        .col-6(user-id=item.id)
           div(class="box-user")
             div(class="inner-avatar")
               img(
