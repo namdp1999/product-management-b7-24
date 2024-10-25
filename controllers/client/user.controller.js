@@ -285,13 +285,26 @@ module.exports.accept = async (req, res) => {
 
 module.exports.friends = async (req, res) => {
   const friendsList = res.locals.user.friendsList;
-  const friendsListId = friendsList.map(item => item.userId);
 
-  const users = await User.find({
-    _id: { $in: friendsListId },
-    deleted: false,
-    status: "active"
-  }).select("id fullName avatar statusOnline");
+  const users = [];
+
+  for (const user of friendsList) {
+    const infoUser = await User.findOne({
+      _id: user.userId,
+      deleted: false,
+      status: "active"
+    });
+
+    users.push({
+      id: infoUser.id,
+      fullName: infoUser.fullName,
+      avatar: infoUser.avatar,
+      statusOnline: infoUser.statusOnline,
+      roomChatId: user.roomChatId
+    });
+  }
+
+  console.log(users);
 
   res.render("client/pages/user/friends", {
     pageTitle: "Danh sách bạn bè",

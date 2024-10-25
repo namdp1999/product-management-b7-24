@@ -1,4 +1,5 @@
 const User = require("../../models/user.model");
+const RoomChat = require("../../models/rooms-chat.model");
 
 module.exports = (req, res) => {
   const userIdA = res.locals.user.id;
@@ -137,14 +138,36 @@ module.exports = (req, res) => {
 
     // Khi A chấp nhận kết bạn của B
     socket.on("CLIENT_ACCEPT_FRIEND", async (userIdB) => {
-      // Thêm {userId, roomChatId} của B vào friendsList của A
-      // Xóa id của B trong acceptFriends của A
       const existBInA = await User.findOne({
         _id: userIdA,
         acceptFriends: userIdB
       });
 
-      if(existBInA) {
+      const existAInB = await User.findOne({
+        _id: userIdB,
+        requestFriends: userIdA
+      });
+
+      if(existBInA && existAInB) {
+        // Tạo phòng chat chung cho A và B
+        const roomChat = new RoomChat({
+          typeRoom: "friend",
+          users: [
+            {
+              userId: userIdA,
+              role: "superAdmin"
+            },
+            {
+              userId: userIdB,
+              role: "superAdmin"
+            }
+          ]
+        });
+
+        await roomChat.save();
+
+        // Thêm {userId, roomChatId} của B vào friendsList của A
+        // Xóa id của B trong acceptFriends của A
         await User.updateOne({
           _id: userIdA
         }, {
@@ -152,20 +175,13 @@ module.exports = (req, res) => {
           $push: {
             friendsList: {
               userId: userIdB,
-              roomChatId: ""
+              roomChatId: roomChat.id
             }
           }
         });
-      }
 
-      // Thêm {userId, roomChatId} của A vào friendsList của B
-      // Xóa id của A trong requestFriends của B
-      const existAInB = await User.findOne({
-        _id: userIdB,
-        requestFriends: userIdA
-      });
-
-      if(existAInB) {
+        // Thêm {userId, roomChatId} của A vào friendsList của B
+        // Xóa id của A trong requestFriends của B
         await User.updateOne({
           _id: userIdB
         }, {
@@ -173,7 +189,7 @@ module.exports = (req, res) => {
           $push: {
             friendsList: {
               userId: userIdA,
-              roomChatId: ""
+              roomChatId: roomChat.id
             }
           }
         });
