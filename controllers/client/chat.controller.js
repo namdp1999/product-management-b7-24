@@ -5,6 +5,8 @@ const streamUploadHelper = require("../../helpers/streamUpload.helper");
 
 module.exports.index = async (req, res) => {
   _io.once("connection", (socket) => {
+    socket.join(req.params.roomChatId);
+
     // Người dùng gửi tin nhắn lên server
     socket.on("CLIENT_SEND_MESSAGE", async (data) => {
       const images = [];
@@ -16,7 +18,7 @@ module.exports.index = async (req, res) => {
 
       const dataChat = {
         userId: res.locals.user.id,
-        // roomChatId: String,
+        roomChatId: req.params.roomChatId,
         content: data.content,
         images: images,
       };
@@ -26,7 +28,7 @@ module.exports.index = async (req, res) => {
       await chat.save();
 
       // Trả data về cho client
-      _io.emit("SERVER_RETURN_MESSAGE", {
+      _io.to(req.params.roomChatId).emit("SERVER_RETURN_MESSAGE", {
         userId: res.locals.user.id,
         fullName: res.locals.user.fullName,
         content: data.content,
@@ -36,7 +38,7 @@ module.exports.index = async (req, res) => {
 
     // CLIENT_SEND_TYPING
     socket.on("CLIENT_SEND_TYPING", (type) => {
-      socket.broadcast.emit("SERVER_RETURN_TYPING", {
+      socket.broadcast.to(req.params.roomChatId).emit("SERVER_RETURN_TYPING", {
         userId: res.locals.user.id,
         fullName: res.locals.user.fullName,
         type: type
@@ -46,6 +48,7 @@ module.exports.index = async (req, res) => {
 
   // Lấy tin nhắn mặc định
   const chats = await Chat.find({
+    roomChatId: req.params.roomChatId,
     deleted: false
   });
 
