@@ -233,6 +233,7 @@ socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIENDS", (data) => {
 
 // SERVER_RETURN_INFO_ACCEPT_FRIENDS
 socket.on("SERVER_RETURN_INFO_ACCEPT_FRIENDS", (data) => {
+  // Thêm A vào danh sách lời mời đã nhận của B
   const listAcceptFriends = document.querySelector(`[list-accept-friends="${data.userIdB}"]`);
   if(listAcceptFriends) {
     const newUser = document.createElement("div");
@@ -292,6 +293,15 @@ socket.on("SERVER_RETURN_INFO_ACCEPT_FRIENDS", (data) => {
       btnRefuseFriend.closest(".box-user").classList.add("refuse");
       socket.emit("CLIENT_REFUSE_FRIEND", data.userIdA);
     })
+  }
+
+  // Xóa A khỏi danh sách người dùng của B
+  const listNotFriends = document.querySelector(`[list-not-friends="${data.userIdB}"]`);
+  if(listNotFriends) {
+    const userA = listNotFriends.querySelector(`[user-id="${data.userIdA}"]`);
+    if(userA) {
+      listNotFriends.removeChild(userA);
+    }
   }
 })
 // End SERVER_RETURN_INFO_ACCEPT_FRIENDS
