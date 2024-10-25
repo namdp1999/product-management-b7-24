@@ -320,3 +320,16 @@ socket.on("SERVER_RETURN_USER_ID_CANCEL_FRIEND", (data) => {
   }
 })
 // End SERVER_RETURN_USER_ID_CANCEL_FRIEND
+
+// SERVER_RETURN_STATUS_ONLINE_USER
+socket.on("SERVER_RETURN_STATUS_ONLINE_USER", (data) => {
+  const listFriend = document.querySelector("[list-friend]");
+  if(listFriend) {
+    const user = listFriend.querySelector(`[user-id="${data.userId}"]`);
+    if(user) {
+      const status = user.querySelector("[status]");
+      status.setAttribute("status", data.statusOnline);
+    }
+  }
+})
+// End SERVER_RETURN_STATUS_ONLINE_USER
