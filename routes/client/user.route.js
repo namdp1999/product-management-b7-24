@@ -56,4 +56,10 @@ router.get(
   controller.friends
 );
 
+router.get(
+  "/rooms",
+  userMiddleware.requireAuth,
+  controller.rooms
+);
+
 module.exports = router;
