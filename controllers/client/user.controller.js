@@ -1,5 +1,6 @@
 const User = require("../../models/user.model");
 const ForgotPassword = require("../../models/forgot-password.model");
+const RoomChat = require("../../models/rooms-chat.model");
 const md5 = require("md5");
 
 const generateHelper = require("../../helpers/generate.helper");
@@ -317,3 +318,56 @@ module.exports.rooms = async (req, res) => {
     pageTitle: "Phòng chat"
   });
 };
+
+module.exports.createRoom = async (req, res) => {
+  const friendsList = res.locals.user.friendsList;
+
+  const friendsListFinal = [];
+  
+  for (const friend of friendsList) {
+    const infoFriend = await User.findOne({
+      _id: friend.userId,
+      deleted: false
+    });
+
+    if(infoFriend) {
+      friendsListFinal.push({
+        userId: friend.userId,
+        fullName: infoFriend.fullName
+      });
+    }
+  }
+
+  res.render("client/pages/user/create-room", {
+    pageTitle: "Tạo phòng chat",
+    friendsList: friendsListFinal
+  });
+};
+
+module.exports.createRoomPost = async (req, res) => {
+  const title = req.body.title;
+  const usersId = req.body.usersId;
+
+  const dataRoom = {
+    title: title,
+    typeRoom: "group",
+    users: []
+  };
+
+  dataRoom.users.push({
+    userId: res.locals.user.id,
+    role: "superAdmin"
+  });
+
+  for (const userId of usersId) {
+    dataRoom.users.push({
+      userId: userId,
+      role: "user"
+    });
+  }
+
+  const room = new RoomChat(dataRoom);
+  await room.save();
+
+  res.redirect(`/chat/${room.id}`);
+}
