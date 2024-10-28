@@ -314,8 +314,15 @@ module.exports.friends = async (req, res) => {
 };
 
 module.exports.rooms = async (req, res) => {
+  const listRoomChat = await RoomChat.find({
+    "users.userId": res.locals.user.id,
+    typeRoom: "group",
+    deleted: false
+  });
+
   res.render("client/pages/user/rooms", {
-    pageTitle: "Phòng chat"
+    pageTitle: "Phòng chat",
+    listRoomChat: listRoomChat
   });
 };
 
